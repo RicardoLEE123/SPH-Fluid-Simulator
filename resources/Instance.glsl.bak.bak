@@ -1,0 +1,40 @@
+#version 130 // 将 #version 指令移至文件的开头
+
+#ifdef VERTEX_SHADER
+
+attribute vec3 Position;
+attribute vec3 Normal;
+attribute mat4 ModelMtx;
+
+varying vec3 fragPosition;
+varying vec3 fragNormal;
+
+uniform mat4 viewProjMtx;
+
+void main() {
+    gl_Position = viewProjMtx * ModelMtx * vec4(Position, 1.0);
+
+    fragPosition = vec3(ModelMtx * vec4(Position, 1.0));
+    fragNormal = vec3(ModelMtx * vec4(Normal, 0.0));
+}
+
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
+
+#ifdef FRAGMENT_SHADER
+
+varying vec3 fragPosition;
+varying vec3 fragNormal;
+
+uniform vec3 LightDirection;
+uniform vec3 LightColor;
+uniform vec3 DiffuseColor;
+
+void main() {
+    vec3 irradiance = vec3(0.3, 0.3, 0.3) * DiffuseColor + DiffuseColor * LightColor * max(0.0, dot(LightDirection, normalize(fragNormal)));
+    
+    gl_FragColor = vec4(irradiance, 1.0);
+}
+
+#endif

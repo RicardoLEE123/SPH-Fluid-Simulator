@@ -12,6 +12,7 @@
 /// Settings which can alter the SPH simulation
 struct SPHSettings
 {
+	// 0.02f, 1000, 1, 1.04f, 0.15f, -9.8f, 0.2f
     SPHSettings(
         float mass, float restDensity, float gasConst, float viscosity,
         float h, float g, float tension);
